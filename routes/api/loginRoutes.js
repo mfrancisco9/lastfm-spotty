@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
         req.session.save(() => {
             req.session.user_id = userData.isSoftDeleted;
             req.session.logged_in = true;
-            req.saession.name = userData.username;
+            req.session.name = userData.username;
             console.log("Username:", req.session.name)
             res.json({ user: userData, message: 'You are now logged in '});
         })
@@ -35,6 +35,19 @@ router.post('/', async (req, res) => {
         res.status(400).json(err);
     }
 });
+
+router.delete('/', (req, res) => {
+    console.log("logout route back end")
+    console.log(req.session)
+    if (req.session) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    } else {
+        res.status(404).end();
+    }
+})
+
 
 
 

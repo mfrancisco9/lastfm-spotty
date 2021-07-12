@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../css/Home.css";
 import axios from "axios";
-
-const API_KEY = "1ea35e703d333e355de5efe6367f873e";
+import Cookies from 'universal-cookie';
+;
+// const API_KEY = "1ea35e703d333e355de5efe6367f873e";
 
 function Home() {
   const [toggles, setToggle] = useState({
@@ -18,11 +19,16 @@ function Home() {
     username: "",
     password: ""
   })
+  const [userData, setUserData] = useState({})
 
+var cookies = new Cookies();
+let userIdCookieString = document.cookie;
+let userIdCookieArray = userIdCookieString.split('=');
+let userIdCookieValue = userIdCookieArray[1];
 
 
   const signUp = () => {
-    if (signupData.password == signupData.passwordConfirm && signupData.password.length > 7) {
+    if (signupData.password === signupData.passwordConfirm && signupData.password.length > 7) {
       console.log("good password, signup front end hit")
       return axios({
         method: 'POST',
@@ -38,8 +44,42 @@ function Home() {
       method: 'POST',
       url: '/api/login',
       data: loginData
-    })
+    }).then((success) => {
+      alert('Login succesful')
+      cookies.set('id', success.data.user.id, {path: '/'})
+      getUser();
+      return window.location.assign('/')
+    }).catch((err) => {
+      alert('Invalid username or password')
+      return window.location.assign('/')
+    } )
   }
+
+  const logOut = () => {
+    return axios ({
+      method: 'DELETE',
+      url: '/api/login'
+    }).then(() => {
+      alert('Logout succesful')
+      document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      return window.location.assign('/');
+    }
+    )}
+
+    const getUser = () => {
+        axios ({
+        method: 'GET',
+        url: `api/users/${userIdCookieValue}`
+      })
+      .then((data) => {
+        setUserData(data.data)
+        console.log(data.data)
+      })}
+
+
+useEffect(() => {
+  getUser()
+},[]);
 
   return (
     <div id="home-main-container">
@@ -55,7 +95,18 @@ function Home() {
       </div>
 
       <div id="login-logged-row">
+
+
+
+
         <div id="logged-decent">
+
+{ userIdCookieValue ? 
+<div>
+  <span>Hello {userData.username}! </span><button onClick={() => logOut()}>logout</button>
+</div> 
+:
+
           <div id="login-signup-btns">
             <button
               onClick={() => {
@@ -76,7 +127,9 @@ function Home() {
               sign up
             </button>
           </div>
+          }
 
+{/* login */}
           <div className="login-signup-drop">
             {toggles.decentLogin ? (
               <div id="login-form">
@@ -85,11 +138,12 @@ function Home() {
                 onChange={(event) => setLoginData({ ...loginData, username: event.target.value})} />
                 <input 
                 placeholder="password" 
-                onChange={(event) => setLoginData({ ...loginData, password: event.target.password})}/>
+                onChange={(event) => setLoginData({ ...loginData, password: event.target.value})}/>
 
                 <button
                   onClick={() => {
-                    setToggle({ decentLogin: false });
+                    logIn();
+                    setToggle({ decentLogin: false, decentSignup: false });
                   }}
                 >
                   login
@@ -97,6 +151,8 @@ function Home() {
               </div>
             ) : null}
 
+
+{/* signup */}
             <div className="login-signup-drop">
               {toggles.decentSignup ? (
                 <div id="signup-form">
@@ -133,25 +189,26 @@ function Home() {
                       setToggle({ decentSignup: false, decentLogin: false });
                     }}
                   >
-                    sign up
+                    create account
                   </button>
                 </div>
               ) : null}
             </div>
           </div>
         </div>
-
+{userIdCookieValue ?
         <div id="logged-spotify">
-          <button>
+          <button onClick={() => console.log("test")}>
             <em>log in to spotify</em>
           </button>
-        </div>
-
+        </div> : null }
+{userIdCookieValue ? 
         <div id="logged-lastfm">
           <button>
             <em>log in to lastfm</em>
           </button>
-        </div>
+        </div> : null}
+        
       </div>
     </div>
   );
