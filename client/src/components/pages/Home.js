@@ -5,94 +5,153 @@ import axios from "axios";
 const API_KEY = "1ea35e703d333e355de5efe6367f873e";
 
 function Home() {
-  const [toggle, setToggle] = useState(false);
-  const [albums, setAlbums] = useState({});
-  const [topArtists, setTopArtists] = useState([]);
-  const [prefs, setPrefs] = useState({
-    username: "",
-    limit: "5",
-    period: "overall",
+  const [toggles, setToggle] = useState({
+    decentLogin: false,
+    decentSignup: false,
   });
+  const [signupData, setSignupData] = useState({
+    username: "",
+    password: "",
+    passwordConfirm: "",
+  });
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: ""
+  })
 
-  const callApi = () => {
-    const url = `//ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${prefs.username}&period=${prefs.period}&api_key=${API_KEY}&limit=${prefs.limit}&format=json`;
 
-    axios.get(url).then((data) => {
-      var albumData = data.data.topalbums.album;
-      setAlbums(albumData);
-      setToggle(true);
-      var artistArr = [];
-      for (let i = 0; i < albumData.length; i++) {
-        artistArr.push(albumData[i].artist.name);
-        //   sub-loop to prevent duplicate artist names -- in future switching to a unique artist ID would probably be better in case of separate artists with same name.
-        for (let j = 0; j < albumData.length; j++) {
-          if (data.data.topalbums.album[j].artist.name == artistArr[i] && j != i) {
-            artistArr.pop();
-          }
-        }
-      }
-      console.log(artistArr);
-    });
+
+  const signUp = () => {
+    if (signupData.password == signupData.passwordConfirm && signupData.password.length > 7) {
+      console.log("good password, signup front end hit")
+      return axios({
+        method: 'POST',
+        url: '/api/signup',
+        data: signupData
+      })
+
+    }
   };
 
-  return (
-    <div id="home-container">
-      <h3>Hello{prefs.username ? " " + prefs.username : null}!</h3>
+  const logIn = () => {
+    return axios({
+      method: 'POST',
+      url: '/api/login',
+      data: loginData
+    })
+  }
 
-      <div id="inputs">
-        <input
-          type="text"
-          max="50"
-          onChange={(event) =>
-            setPrefs({ ...prefs, username: event.target.value })
-          }
-        />
-        <span>username</span>
-        <br />
-        <select
-          onChange={(event) =>
-            setPrefs({ ...prefs, limit: event.target.value })
-          }
-        >
-          <option>5</option>
-          <option>10</option>
-          <option>25</option>
-        </select>
-        <span># of albums</span>
-        <br />
-        <select
-          onChange={(event) =>
-            setPrefs({ ...prefs, period: event.target.value })
-          }
-        >
-          <option>overall</option>
-          <option>7day</option>
-          <option>1month</option>
-          <option>3month</option>
-          <option>6month</option>
-          <option>12month</option>
-        </select>
-        <span>period</span>
-        <br />
-        <button
-          onClick={() => {
-            callApi();
-          }}
-        >
-          Submit
-        </button>
+  return (
+    <div id="home-main-container">
+      <div id="home-info">
+        <div id="main-logo">
+          <h1>decent playlist tool</h1>
+        </div>
+
+        <div id="description">
+          log in with your spotify and last.fm accounts to create custom
+          playlists straight to your spotify. actually discover music.
+        </div>
       </div>
-      <div id="albumbox">
-        {toggle
-          ? albums.map((album) => (
-              <div className="albums">
-                <div>
-                  {album.artist.name} - {album.name}
-                </div>
-                <img src={album.image[3]["#text"]} />
+
+      <div id="login-logged-row">
+        <div id="logged-decent">
+          <div id="login-signup-btns">
+            <button
+              onClick={() => {
+                setToggle({
+                  decentLogin: true,
+                  decentSignup: false,
+                });
+              }}
+            >
+              <em>log in to decent</em>
+            </button>
+
+            <button
+              onClick={() => {
+                setToggle({ decentSignup: true });
+              }}
+            >
+              sign up
+            </button>
+          </div>
+
+          <div className="login-signup-drop">
+            {toggles.decentLogin ? (
+              <div id="login-form">
+                <input 
+                placeholder="username"
+                onChange={(event) => setLoginData({ ...loginData, username: event.target.value})} />
+                <input 
+                placeholder="password" 
+                onChange={(event) => setLoginData({ ...loginData, password: event.target.password})}/>
+
+                <button
+                  onClick={() => {
+                    setToggle({ decentLogin: false });
+                  }}
+                >
+                  login
+                </button>
               </div>
-            ))
-          : null}
+            ) : null}
+
+            <div className="login-signup-drop">
+              {toggles.decentSignup ? (
+                <div id="signup-form">
+                  <input
+                    placeholder="username"
+                    onChange={(event) =>
+                      setSignupData({
+                        ...signupData,
+                        username: event.target.value,
+                      })
+                    }
+                  />
+                  <input
+                    placeholder="password"
+                    onChange={(event) =>
+                      setSignupData({
+                        ...signupData,
+                        password: event.target.value,
+                      })
+                    }
+                  />
+                  <input
+                    placeholder="password confirm"
+                    onChange={(event) =>
+                      setSignupData({
+                        ...signupData,
+                        passwordConfirm: event.target.value,
+                      })
+                    }
+                  />
+                  <button
+                    onClick={() => {
+                      signUp();
+                      setToggle({ decentSignup: false, decentLogin: false });
+                    }}
+                  >
+                    sign up
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div id="logged-spotify">
+          <button>
+            <em>log in to spotify</em>
+          </button>
+        </div>
+
+        <div id="logged-lastfm">
+          <button>
+            <em>log in to lastfm</em>
+          </button>
+        </div>
       </div>
     </div>
   );
