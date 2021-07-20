@@ -22,4 +22,13 @@ router.get("/:id", async (req, res) => {
     }
   });
 
+router.put('/:id', (req, res) => {
+  User.update({
+    lastfm_username: req.body.lastfm_username,
+    lastfm_sessionkey: req.body.lastfm_sessionkey
+  },
+  {where: {id: req.params.id}}
+  ).then(updatedUser => res.json(updatedUser)).catch(error => res.json(error))
+})
+
 module.exports = router;

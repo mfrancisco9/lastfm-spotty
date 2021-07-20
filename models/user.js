@@ -26,6 +26,16 @@ User.init(
                 trim: true,
                 allowNull: false,
             },
+            lastfm_username: {
+                type: DataTypes.STRING,
+                trim: true,
+                allownull: true,
+            },
+            lastfm_sessionkey: {
+                type: DataTypes.STRING,
+                trim: true,
+                allowNull: true,
+            }
         
     },
     {

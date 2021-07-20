@@ -1,0 +1,15 @@
+
+// overwriting theme colors
+
+$primary: #78FECF;
+$secondary: #be6e46;
+$success: #188C59;
+$danger: #942624;
+$warning: #EEA243;
+$info: #e5eafa;
+$light: #EDFDED;
+$dark: #00291a;
+
+
+// import must be at bottom
+@import "~bootstrap/scss/bootstrap.scss"
