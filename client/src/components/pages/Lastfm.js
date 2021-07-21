@@ -68,8 +68,9 @@ function Lastfm(props) {
   return (
     <div id="lastfm-body">
     <div id="options-div" className="bg-dark">
-      <span>Getting listening info for last.fm user {userData.lastfm_username}</span>
-
+    {props.topArtists.length ? <div id="artists-selected-row" className="row">{props.topArtists.map((top) => (
+    <div className="col col-md-2">{top}
+    </div>))}</div> : null }
       <div id="options-box" className="bg-success">
         <div id="method-dropdown" className="options-column">
         <span>Data</span>

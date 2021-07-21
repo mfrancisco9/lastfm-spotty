@@ -13,6 +13,10 @@
     margin-top: 50px;
 }
 
+#artists-selected-row {
+    width: 100%;
+}
+
 #options-box {
     padding: 25px;
 }

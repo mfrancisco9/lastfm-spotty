@@ -348,7 +348,7 @@ function Home(props) {
               <em>log in to lastfm</em>
             </button> }
           </div>
-        ) : null}
+        ) : null} 
       </div>
     </div>
   );

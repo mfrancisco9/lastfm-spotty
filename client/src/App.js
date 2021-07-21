@@ -26,7 +26,7 @@ let userIdCookieValue = userIdCookieArray[1];
 const [userData, setUserData] = useState({
   username: "",
 })
-const [topArtists, setTopArtists] = useState([]);
+const [topArtists, setTopArtists] = useState(() => []);
 
 const getUser = () => {
   console.log("getting user")
