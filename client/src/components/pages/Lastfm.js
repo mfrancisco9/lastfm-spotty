@@ -150,17 +150,21 @@ function Lastfm() {
     <div id="results-row" className="row">
     {userTops.length && resultsToggle.content == "artists" ? userTops.map((top) => (
     
-    <a className="result" href={top.url}>
+    <div className="artist-result" href={top.url}>
         <span className="artist-name">{top.name}</span>
         <span className="artist-plays">{top.playcount} plays</span>
-    </a>)) : null}
+    </div>)) : null}
 
 
 
-    {userTops.length && resultsToggle.content == "albums" ? "albums" : null}
+    {userTops.length && resultsToggle.content == "albums" ? userTops.map((top) => (
+      <div className="albums-item"><span className="album-artist-name">{top.artist.name}</span> <span className="album-name">{top.name}</span></div> 
+    )) : null}
 
 
-    {userTops.length && resultsToggle.content == "tracks" ? "tracks" : null}
+    {userTops.length && resultsToggle.content == "tracks" ? userTops.map((top) => (
+      <div>track goes here</div>
+    )) : null}
 
 
 
