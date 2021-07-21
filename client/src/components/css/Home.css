@@ -1,7 +1,7 @@
 body {
     font-family: "Chivo", sans-serif;
     color: #e5eafa;
-    background-color: #042504;
+    background-color: #021202;
 }
 
 
@@ -26,7 +26,7 @@ body {
 }
 
 #main-logo {
-    text-shadow: 2px 3px 1px #BE6e46;
+    text-shadow: 1px 2px 1px #BE6e46;
     color: #e5eafa;
 }
 
@@ -50,23 +50,23 @@ body {
     display: flex;
     flex-direction: column;
     color: #e5eafa;
-    border: 1px solid white;
 }
 
 .btns-row {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     width: 100%;
     height: 25%;
-    border: 1px solid white;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #78fecf;
 }
 
 .form-row {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: space-around;
     justify-content: center;
 }
 
@@ -79,13 +79,6 @@ body {
 margin: 0px 5px;
 font-size: 12px;
 width: auto;
-}
-
-#spotify-lastfm-login-btns {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
 }
 
 

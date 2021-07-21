@@ -6,12 +6,12 @@ require("dotenv").config();
 
 function Lastfm() {
   const [userData, setUserData] = useState({});
-  const [resultsToggle, setResultsToggle] = useState({display: false, content: "artists"})
+  const [resultsToggle, setResultsToggle] = useState({
+    display: false,
+    content: "artists"})
 
-  const [topArtists, setTopArtists] = useState([]);
-  const [topAlbums, setTopAlbums] = useState([]);
-  const [topTracks, setTopTracks] = useState([]);
-  const [similarTopArtists, setSimilarTopArtists] = useState([]);
+  const [userTops, setUserTops] = useState([]);
+  // const [similarTopArtists, setSimilarTopArtists] = useState([]);
 
   const [lastFmDataPreferences, setLastFmDataPreferences] = useState({
     period: "overall",
@@ -32,77 +32,71 @@ function Lastfm() {
         url: `api/users/${userIdCookieValue}`,
       }).then((data) => {
         setUserData(data.data);
-        // getTopArtists(data.data.lastfm_username);
-        // getTopAlbums(data.data.lastfm_username);
       });
     }
   };
 
-  // last.fm functions
-
-  // const getTopArtists = (username) => {
+  // const getSimilarArtists = (mbid) => {
   //   axios({
   //     method: "GET",
-  //     url: `https://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=${username}&limit=${10}&api_key=${
+  //     url: `https://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&mbid=${mbid}&limit=${5}&api_key=${
   //       process.env.REACT_APP_LASTFM_KEY
   //     }&format=json`,
   //   }).then((data) => {
-  //     setTopArtists(data.data.topartists.artist);
-  //     for (let i = 0; i < data.data.topartists.artist.length; i++) {
-  //       getSimilarArtists(data.data.topartists.artist[i].mbid);
-  //     }
+  //     similarTopArtists.push({
+  //       artist: data.data.similarartists["@attr"],
+  //       similar: data.data.similarartists.artist,
+  //     });
+  //     // console.log(similarTopArtists);
   //   });
   // };
 
-  const getSimilarArtists = (mbid) => {
-    axios({
-      method: "GET",
-      url: `https://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&mbid=${mbid}&limit=${5}&api_key=${
-        process.env.REACT_APP_LASTFM_KEY
-      }&format=json`,
-    }).then((data) => {
-      similarTopArtists.push({
-        artist: data.data.similarartists["@attr"],
-        similar: data.data.similarartists.artist,
-      });
-      // console.log(similarTopArtists);
-    });
-  };
-
+  // last.fm's api no longer gives access to image urls. because the mbid (music brainz id) is included, this can be used with the musicbrainz api to get an image
+  // getAritstImage() borrows from github user hugovk's "now-playing-radiator"
+  // because this does not give a lot of images, currently it is not in use
+  
+  // const getArtistImage = (mbid) => {
+  //   const mbidUrl = 'https://musicbrainz.org/ws/2/artist/' + mbid + '?inc=url-rels&fmt=json';
+  //   axios({
+  //     method: "GET",
+  //     url: mbidUrl
+  //   }).then(({data}) => {
+  //     const relations = data.relations
+  //     for (let i = 0; i < relations.length; i++) {
+  //       if (relations[i].type === 'image') {
+  //         let image_url = relations[i].url.resource
+  //         if (image_url.startsWith('https://commons.wikimedia.org/wiki/File:')) {
+  //           const filename = image_url.substring(image_url.lastIndexOf('/') + 1);
+  //           image_url = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/' + filename;
+  //           console.log(image_url)
+  //           return image_url
+  //       }}
+  //     }
+  //   })
+  // }
 
   const makeCall = () => {
+    console.log("making call")
     axios({
       method: "GET",
       url: `https://ws.audioscrobbler.com/2.0/?method=user.${lastFmDataPreferences.method}&user=${userData.lastfm_username}&period=${lastFmDataPreferences.period}&limit=${lastFmDataPreferences.limit}&api_key=${process.env.REACT_APP_LASTFM_KEY}&format=json`
     }).then(({data}) => {
-      setResultsToggle({...resultsToggle, display: true})
       if (lastFmDataPreferences.method === "gettopartists") {
         console.log(data.topartists.artist)
-        setResultsToggle({...resultsToggle, content: "artists"})
-        setTopArtists(data.topartists.artist)}
-
+        setResultsToggle({display: true, content: "artists"})
+        setUserTops(data.topartists.artist)
+      }
       if (lastFmDataPreferences.method === "gettopalbums") {
         console.log(data.topalbums.album)
-        setResultsToggle({...resultsToggle, content: "albums"})
-
+        setResultsToggle({display: true, content: "albums"})
+        setUserTops(data.topalbums.album)
       }
       if (lastFmDataPreferences.method === "gettoptracks") {
-        console.log(data.toptracks.track)}
-        setResultsToggle({...resultsToggle, content: "tracks"})
-
-
+        console.log(data.toptracks.track)
+        setResultsToggle({display: true, content: "tracks"})
+        setUserTops(data.toptracks.track)
+      }
     })
-  }
-
-  const methodSwitch = (method) => {
-    switch(method) {
-      case 'gettopartists':
-        return 'artists';
-      case 'gettopalbums':
-        return 'albums';
-      case 'gettoptracks':
-        return 'tracks';
-    }
   }
 
 
@@ -111,10 +105,10 @@ function Lastfm() {
   }, []);
 
   return (
-    <div id="options-div">
-      <span>What's up {userData.lastfm_username}!</span>
+    <div id="options-div" className="bg-dark">
+      <span>Getting listening info for last.fm user {userData.lastfm_username}</span>
 
-      <div id="options-box">
+      <div id="options-box" className="bg-success">
         <div id="method-dropdown" className="options-column">
         <span>Data</span>
           <select onChange={(event) => setLastFmDataPreferences({...lastFmDataPreferences, method: event.target.value})}>
@@ -146,13 +140,31 @@ function Lastfm() {
           </select>
           </div>
 
-          <button onClick={() => makeCall()}>submit</button>
+          <button className="btn btn-info" onClick={() => {
+            makeCall()}}>submit</button>
 
       </div>
 
-{  resultsToggle ? <div id="results-box">
+{ resultsToggle.display ? 
+
+    <div id="results-row" className="row">
+    {userTops.length && resultsToggle.content == "artists" ? userTops.map((top) => (
     
-    {}
+    <a className="result" href={top.url}>
+        <span className="artist-name">{top.name}</span>
+        <span className="artist-plays">{top.playcount} plays</span>
+    </a>)) : null}
+
+
+
+    {userTops.length && resultsToggle.content == "albums" ? "albums" : null}
+
+
+    {userTops.length && resultsToggle.content == "tracks" ? "tracks" : null}
+
+
+
+
 
 
     </div> : null }

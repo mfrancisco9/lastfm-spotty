@@ -1,18 +1,17 @@
 #options-div {
-    color: white;
-    border: 3px solid greenyellow;
+    border-radius: 5px;
     padding: 50px;
     width: 70vw;
 }
 
 #options-box {
     padding: 25px;
-    border: 1px solid lightcoral
 }
 
 #options-box {
     display: flex;
     flex-direction: row;
+    border-radius: 3px;
 }
 
 .options-column {
@@ -24,9 +23,53 @@
 }
 
 .options-column select, button {
-    width: 50%
+    width: 75%
 }
 
-#results-box {
-    border: 1px solid white;
+#results-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-top: 25px;
+}
+
+#results-row a {
+    text-decoration: none;
+    color: #e5eafa;
+}
+
+#results-row>a:nth-child(odd):hover {
+color: #FAF33E;
+background-color: #942624;
+border-radius: 50%;
+transform: rotate(-5deg);
+}
+
+
+
+#results-row>a:nth-child(even):hover {
+color: #FAF33E;
+background-color: #188C59;
+border-radius: 50%;
+transform: rotate(5deg);
+
+}
+
+#results-row>a:hover .artist-name {
+    text-decoration: #00291a wavy underline;
+}
+
+.result { 
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100px;
+    padding: 10px;
+}
+
+.artist-plays {
+    font-size: 11px;
 }
