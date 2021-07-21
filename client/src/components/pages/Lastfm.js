@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 require("dotenv").config();
 
-function Lastfm() {
+function Lastfm(props) {
   const [userData, setUserData] = useState({});
   const [resultsToggle, setResultsToggle] = useState({
     display: false,
@@ -36,45 +36,6 @@ function Lastfm() {
     }
   };
 
-  // const getSimilarArtists = (mbid) => {
-  //   axios({
-  //     method: "GET",
-  //     url: `https://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&mbid=${mbid}&limit=${5}&api_key=${
-  //       process.env.REACT_APP_LASTFM_KEY
-  //     }&format=json`,
-  //   }).then((data) => {
-  //     similarTopArtists.push({
-  //       artist: data.data.similarartists["@attr"],
-  //       similar: data.data.similarartists.artist,
-  //     });
-  //     // console.log(similarTopArtists);
-  //   });
-  // };
-
-  // last.fm's api no longer gives access to image urls. because the mbid (music brainz id) is included, this can be used with the musicbrainz api to get an image
-  // getAritstImage() borrows from github user hugovk's "now-playing-radiator"
-  // because this does not give a lot of images, currently it is not in use
-  
-  // const getArtistImage = (mbid) => {
-  //   const mbidUrl = 'https://musicbrainz.org/ws/2/artist/' + mbid + '?inc=url-rels&fmt=json';
-  //   axios({
-  //     method: "GET",
-  //     url: mbidUrl
-  //   }).then(({data}) => {
-  //     const relations = data.relations
-  //     for (let i = 0; i < relations.length; i++) {
-  //       if (relations[i].type === 'image') {
-  //         let image_url = relations[i].url.resource
-  //         if (image_url.startsWith('https://commons.wikimedia.org/wiki/File:')) {
-  //           const filename = image_url.substring(image_url.lastIndexOf('/') + 1);
-  //           image_url = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/' + filename;
-  //           console.log(image_url)
-  //           return image_url
-  //       }}
-  //     }
-  //   })
-  // }
-
   const makeCall = () => {
     console.log("making call")
     axios({
@@ -105,6 +66,7 @@ function Lastfm() {
   }, []);
 
   return (
+    <div id="lastfm-body">
     <div id="options-div" className="bg-dark">
       <span>Getting listening info for last.fm user {userData.lastfm_username}</span>
 
@@ -148,22 +110,28 @@ function Lastfm() {
 { resultsToggle.display ? 
 
     <div id="results-row" className="row">
-    {userTops.length && resultsToggle.content == "artists" ? userTops.map((top) => (
+    {userTops.length && resultsToggle.content === "artists" ? userTops.map((top) => (
     
     <div className="artist-result" href={top.url}>
         <span className="artist-name">{top.name}</span>
-        <span className="artist-plays">{top.playcount} plays</span>
+        <span className="artist-plays">{top.playcount} plays</span> <div className="add-btn" id={top.name} onClick={(e)=> props.setTopArtists([...props.topArtists, e.target.id])}>add</div>
     </div>)) : null}
 
 
 
-    {userTops.length && resultsToggle.content == "albums" ? userTops.map((top) => (
-      <div className="albums-item"><span className="album-artist-name">{top.artist.name}</span> <span className="album-name">{top.name}</span></div> 
+    {userTops.length && resultsToggle.content === "albums" ? userTops.map((top) => (
+      <div className="albums-item">
+        <span className="album-artist-name">{top.artist.name}</span> 
+        <div className="add-btn" id={top.artist.name} onClick={(e)=> props.setTopArtists([...props.topArtists, e.target.id])}>add</div>
+        <span className="album-name">{top.name}</span></div> 
     )) : null}
 
 
-    {userTops.length && resultsToggle.content == "tracks" ? userTops.map((top) => (
-      <div>track goes here</div>
+    {userTops.length && resultsToggle.content === "tracks" ? userTops.map((top) => (
+      <div className="tracks-item">
+        <span className="track-artist-name">{top["@attr"].rank}. {top.artist.name}</span>
+        <div className="add-btn" id={top.artist.name} onClick={(e) => props.setTopArtists([...props.topArtists, e.target.id])}>add</div>
+        <span className="track-name">{top.name}</span></div>
     )) : null}
 
 
@@ -173,6 +141,7 @@ function Lastfm() {
 
     </div> : null }
 
+    </div>
     </div>
   );
 }

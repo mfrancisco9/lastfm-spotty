@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../css/Home.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-const md5 = require('md5');
 require("dotenv").config();
-function Home() {
+
+function Home(props) {
   const LASTFM_KEY = "685befed1e858efa8d34ec169041ec63";
 
   // states
@@ -21,9 +21,6 @@ function Home() {
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
-  });
-  const [userData, setUserData] = useState({
-    username: "",
   });
 
   // cookies
@@ -57,7 +54,7 @@ function Home() {
       .then((success) => {
         alert("Login succesful");
         cookies.set("id", success.data.user.id, { path: "/" });
-        getUser();
+        props.getUser();
         return window.location.assign("/")
       })
       .catch((err) => {
@@ -77,52 +74,53 @@ function Home() {
     });
   };
 
-  // populates userData state with all user info
-  const getUser = () => {
-    console.log("getting user")
-    if (!isNaN(userIdCookieValue)) {
-      console.log("cookie id isnt not a number")
-    axios({
-      method: "GET",
-      url: `api/users/${userIdCookieValue}`,
-    }).then((data) => {
-      setUserData(data.data);
-      console.log(data.data);
-    });
-  }
-  };
+  // populates props.userData state with all user info
+  // const getUser = () => {
+  //   console.log("getting user")
+  //   if (!isNaN(userIdCookieValue)) {
+  //     console.log("cookie id isnt not a number")
+  //   axios({
+  //     method: "GET",
+  //     url: `api/users/${userIdCookieValue}`,
+  //   }).then((data) => {
+  //     props.setUserData(data.data);
+  //     console.log(data.data);
+  //   });
+  // }
+  // };
 
-  const getLastFMSession = () => {
-    const token = new URLSearchParams(window.location.search).get("token");
-    var string = "api_key" + process.env.REACT_APP_LASTFM_KEY + "methodauth.getSessiontoken" + token + process.env.REACT_APP_LASTFM_SECRET
-    var apiSig = md5(string)
-    var apiURL = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${process.env.REACT_APP_LASTFM_KEY}&token=${token}&api_sig=${apiSig}&format=json`
-    axios({
-      method: "GET",
-      url: apiURL
-    }).then((data) => {
-      console.log(data)
-      axios({
-        method: "PUT",
-        url: `api/users/${userIdCookieValue}`,
-        data: { 
-          lastfm_sessionkey: data.data.session.key,
-          lastfm_username: data.data.session.name
-        }
-      })
-    })
-  }
+  // const getLastFMSession = () => {
+  //   const token = new URLSearchParams(window.location.search).get("token");
+  //   var string = "api_key" + process.env.REACT_APP_LASTFM_KEY + "methodauth.getSessiontoken" + token + process.env.REACT_APP_LASTFM_SECRET
+  //   var apiSig = md5(string)
+  //   var apiURL = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${process.env.REACT_APP_LASTFM_KEY}&token=${token}&api_sig=${apiSig}&format=json`
+  //   axios({
+  //     method: "GET",
+  //     url: apiURL
+  //   }).then((data) => {
+  //     console.log(data)
+  //     axios({
+  //       method: "PUT",
+  //       url: `api/users/${userIdCookieValue}`,
+  //       data: { 
+  //         lastfm_sessionkey: data.data.session.key,
+  //         lastfm_username: data.data.session.name
+  //       }
+  //     })
+  //   })
+  // }
 
-  useEffect(() => {
-    getUser();
-    if (new URLSearchParams(window.location.search).get("token")){
-      getLastFMSession();
-      console.log(userData)
-    }
-  }, []);
+  // useEffect(() => {
+  //   getUser();
+  //   if (new URLSearchParams(window.location.search).get("token")){
+  //     getLastFMSession();
+  //     console.log(props.userData)
+  //   }
+  // }, []);
 
   return (
     // main logo and description
+    <div id="home-body">
     <div id="home-main-container" className="container">
       <div id="home-info" className="row">
         <div id="main-logo" className="col col-md-4">
@@ -141,7 +139,7 @@ function Home() {
             {!userIdCookieValue ? 
             <button className="login-signup-btn btn btn-primary"
             onClick={()=> setToggle({decentLogin: true, decentSignup: false})}
-            >login</button> : <span id="greeting">Hello, {userData.username}!</span>}
+            >login</button> : <span id="greeting">Hello, {props.userData.username}!</span>}
             
             
             {!userIdCookieValue ? 
@@ -189,10 +187,11 @@ function Home() {
         { userIdCookieValue ?
         <div className="btns-row" >
           {true ? <button className="external-btn btn btn-primary">login to spotify</button> : null }
-          { userData.lastfm_sessionkey ? <span>logged into last.fm as {userData.lastfm_username}</span> : <button onClick={()=> (window.location.href=`http://www.last.fm/api/auth/?api_key=${LASTFM_KEY}&cb=http://localhost:3000/`)}className="external-btn btn btn-primary">login to lastfm</button> }
+          { props.userData.lastfm_sessionkey ? <span>logged into last.fm as {props.userData.lastfm_username}</span> : <button onClick={()=> (window.location.href=`http://www.last.fm/api/auth/?api_key=${LASTFM_KEY}&cb=http://localhost:3000/`)}className="external-btn btn btn-primary">login to lastfm</button> }
         </div> : null }
       </div>
 
+      </div>
       </div>
 
 
@@ -219,7 +218,7 @@ function Home() {
         <div id="logged-decent">
           {userIdCookieValue ? (
             <div>
-              <span>Hello {userData.username}! </span>
+              <span>Hello {props.userData.username}! </span>
               <button className="btn btn-primary" onClick={() => logOut()}>logout</button>
             </div>
           ) : (
@@ -339,7 +338,7 @@ function Home() {
         ) : null}
         {userIdCookieValue ? (
           <div id="logged-lastfm">
-            { userData.lastfm_sessionkey ? <span>logged into last.fm as {userData.lastfm_username}</span> :
+            { props.userData.lastfm_sessionkey ? <span>logged into last.fm as {props.userData.lastfm_username}</span> :
             <button
             className="btn btn-primary"
               onClick={() => {

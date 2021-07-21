@@ -4,7 +4,13 @@ body {
     background-color: #021202;
 }
 
-
+#home-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh
+}
 
 #home-main-container {
     background-color: #0C462D;

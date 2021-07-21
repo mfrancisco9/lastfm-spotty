@@ -1,3 +1,11 @@
+#lastfm-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh
+}
+
 #options-div {
     border-radius: 5px;
     padding: 50px;
@@ -55,7 +63,7 @@ transform: rotate(5deg);
 
 }
 
-#results-row>a:hover .artist-name {
+#results-row>div:hover .artist-name {
     text-decoration: #00291a wavy underline;
 }
 
@@ -69,35 +77,62 @@ transform: rotate(5deg);
     padding: 10px;
 }
 
+.add-btn {
+    margin-left: 30px;
+    display: none;
+    background-color: #78fecf;
+    color: #102156;
+    font-weight: bolder;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.add-btn:hover {
+    background-color: #102156;
+    color: #FAF33E;
+    cursor: pointer;
+}
+
+#results-row>div:hover .add-btn {
+    display: block;
+}
+
 .artist-plays {
     font-size: 11px;
 }
 
-.albums-item {
+.albums-item, .tracks-item {
     width: 100%;
+    height: 40px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     box-sizing: border-box;
-    margin: 10px;
-    padding: 8px 10px;
+    margin: 5px 10px;
+    padding: 5px 8px;
 }
 
-#results-row>div:nth-child(odd).albums-item {
+#results-row>div:nth-child(odd).albums-item, #results-row>div:nth-child(odd).tracks-item {
  background-color: #003D27;
  border-radius: 4px 2px 
 }
 
-.album-name {
+.album-name, .track-name {
     font-weight: bold;
 }
 
-#results-row>div:nth-child(odd).albums-item:hover{
+#results-row>div:nth-child(odd).albums-item:hover, #results-row>div:nth-child(odd).tracks-item:hover{
     color: #FAF33E;
     background-color: #942624;
    }
 
-#results-row>div:nth-child(even).albums-item:hover{
+#results-row>div:nth-child(even).albums-item:hover, #results-row>div:nth-child(even).tracks-item:hover{
     color: #FAF33E;
     background-color: #188C59;
+}
+
+.track-name {
+    border-bottom: 1px solid #78fecf;
+    text-shadow: 2px 2px 1px #102156;
+
 }
