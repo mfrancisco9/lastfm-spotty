@@ -6,13 +6,10 @@ import Cookies from "universal-cookie";
 import axios from "axios"
 import Home from './components/pages/Home';
 import Lastfm from './components/pages/Lastfm';
+import Spotify from './components/pages/Spotify';
 import Header from './Header'
+
 const md5 = require('md5')
-
-
-// components
-
-
 
 
 function App() {
@@ -81,6 +78,9 @@ useEffect(() => {
   <Route 
   exact path = '/Lastfm' 
   render ={(props) => ( <Lastfm topArtists={topArtists} setTopArtists={setTopArtists} />)} />
+  <Route
+  exact path = '/Spotify'
+  render ={(props) => <Spotify />} />
   </Router>
   </div>
   );

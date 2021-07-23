@@ -67,13 +67,13 @@ function Lastfm(props) {
     console.log(`fixed string is ${fixedString}`)
     if (props.topArtists.includes(artist) === false)
       props.setTopArtists([...props.topArtists, fixedString]);
-    // axios({
-    //   method: "PUT",
-    //   url: `api/users/save/${userIdCookieValue}`,
-    //   data: {
-    //     artist_picks: props.topArtists
-    //   }
-    // })
+    axios({
+      method: "PUT",
+      url: `api/users/save/${userIdCookieValue}`,
+      data: {
+        artist_picks: props.topArtists
+      }
+    })
   };
 
   const handleDelete = (e) => {
