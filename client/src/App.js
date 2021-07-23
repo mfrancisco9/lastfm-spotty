@@ -40,13 +40,6 @@ const getUser = () => {
 };
 
 
-const getSpotifySession = () => {
-  var client_id = process.env.REACT_APP_SPOTIFY_ID;
-  var client_secret = process.env.REACT_APP_SPOTIFY_SECRET;
-  var redirect_uri = 'http://localhost:3000'
-  var scopes = 'user-top-read use-read-recently-played playlist-modify-public playlist-read-private ugc-image-upload'
-}
-
 const getLastFMSession = () => {
   const token = new URLSearchParams(window.location.search).get("token");
   var string = "api_key" + process.env.REACT_APP_LASTFM_KEY + "methodauth.getSessiontoken" + token + process.env.REACT_APP_LASTFM_SECRET

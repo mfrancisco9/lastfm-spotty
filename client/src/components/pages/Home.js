@@ -6,9 +6,21 @@ require("dotenv").config();
 
 function Home(props) {
   const LASTFM_KEY = "685befed1e858efa8d34ec169041ec63";
+  const SPOTIFY_ID = "be0a13c1020044b6a93d95d7b34662ec";
+  const SPOTIFY_SECRET = process.env.REACT_APP_SPOTIFY_SECRET;
+  const SPOTIFY_SCOPES = 'user-top-read playlist-modify-private playlist-read-private'
+  const SPOTIFY_REDIRECT_URI = 'http://localhost:3000'
+
+  const spotifyURL = 'https://accounts.spotify.com/authorize' +
+  '?response_type=code' +
+  '&client_id=' + SPOTIFY_ID +
+  (SPOTIFY_SCOPES ? '&scope=' + encodeURIComponent(SPOTIFY_SCOPES) : '') +
+  '&redirect_uri=' + encodeURIComponent(SPOTIFY_REDIRECT_URI);
+
+
+  console.log(SPOTIFY_ID, SPOTIFY_SCOPES)
 
   // states
-
   const [toggles, setToggle] = useState({
     decentLogin: false,
     decentSignup: false,
@@ -65,6 +77,15 @@ function Home(props) {
       });
   };
 
+  const spotifyLogin = () => {
+    axios({
+      method: "POST",
+      url: "/api/spotify/login"
+    }).then((success) => {
+      alert("YES")
+    })
+  }
+
   const logOut = () => {
     return axios({
       method: "DELETE",
@@ -76,49 +97,6 @@ function Home(props) {
     });
   };
 
-  // populates props.userData state with all user info
-  // const getUser = () => {
-  //   console.log("getting user")
-  //   if (!isNaN(userIdCookieValue)) {
-  //     console.log("cookie id isnt not a number")
-  //   axios({
-  //     method: "GET",
-  //     url: `api/users/${userIdCookieValue}`,
-  //   }).then((data) => {
-  //     props.setUserData(data.data);
-  //     console.log(data.data);
-  //   });
-  // }
-  // };
-
-  // const getLastFMSession = () => {
-  //   const token = new URLSearchParams(window.location.search).get("token");
-  //   var string = "api_key" + process.env.REACT_APP_LASTFM_KEY + "methodauth.getSessiontoken" + token + process.env.REACT_APP_LASTFM_SECRET
-  //   var apiSig = md5(string)
-  //   var apiURL = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${process.env.REACT_APP_LASTFM_KEY}&token=${token}&api_sig=${apiSig}&format=json`
-  //   axios({
-  //     method: "GET",
-  //     url: apiURL
-  //   }).then((data) => {
-  //     console.log(data)
-  //     axios({
-  //       method: "PUT",
-  //       url: `api/users/${userIdCookieValue}`,
-  //       data: { 
-  //         lastfm_sessionkey: data.data.session.key,
-  //         lastfm_username: data.data.session.name
-  //       }
-  //     })
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   getUser();
-  //   if (new URLSearchParams(window.location.search).get("token")){
-  //     getLastFMSession();
-  //     console.log(props.userData)
-  //   }
-  // }, []);
 
   return (
     // main logo and description
@@ -188,7 +166,7 @@ function Home(props) {
       <div id="spotify-lastfm" className="col col-md-6">
         { userIdCookieValue ?
         <div className="btns-row" >
-          {true ? <button className="external-btn btn btn-primary">login to spotify</button> : null }
+          {props.userData.spotify_sessionkey ? <span>logged into spotify as {props.userData.spotify_username}</span> : <button onClick={()=> spotifyLogin()} className="external-btn btn btn-primary">login to spotify</button>}
           { props.userData.lastfm_sessionkey ? <span>logged into last.fm as {props.userData.lastfm_username}</span> : <button onClick={()=> (window.location.href=`http://www.last.fm/api/auth/?api_key=${LASTFM_KEY}&cb=http://localhost:3000/`)}className="external-btn btn btn-primary">login to lastfm</button> }
         </div> : <div className="btns-row">log in or sign up to connect spotify and last.fm</div> }
       </div>
