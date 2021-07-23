@@ -2,10 +2,6 @@ const router = require("express").Router();
 const sequelize = require('sequelize');
 const { User } = require("../../models");
 
-// router.post('/login', async (req res) => {
-//     console.log('login backend route hit')
-// })
-
 // get one user
 router.get("/:id", async (req, res) => {
     try {
@@ -31,4 +27,15 @@ router.put('/:id', (req, res) => {
   ).then(updatedUser => res.json(updatedUser)).catch(error => res.json(error))
 })
 
+router.put('/save/:id', (req, res) => {
+  User.update({
+  artist_picks: [req.body.artist_picks]
+  },
+  {where: {id: req.params.id}}
+  ).then(updatedUser => res.json(updatedUser)).catch(error => res.json(error))
+})
+
+
+
 module.exports = router;
+

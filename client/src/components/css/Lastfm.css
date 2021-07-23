@@ -27,8 +27,32 @@
     border-radius: 3px;
 }
 
+
+/* selected artists display at top of options box */
+
+#selected-info-text {
+    text-decoration: #2a68a2 wavy underline;
+}
+
+#selected-clear-text {
+    text-decoration: #cf3c3a wavy underline;
+    text-align: center;
+}
+
+#selected-clear-text:hover {
+    text-decoration: #193e61 wavy underline;
+    cursor: pointer;
+    border-radius: 100%;
+    box-sizing: border-box;
+    color: #FAF33E;
+}
+
+#artists-selected-row {
+
+}
+
+
 .options-column {
-    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -71,7 +95,7 @@ transform: rotate(5deg);
     text-decoration: #00291a wavy underline;
 }
 
-.artist-result { 
+.artist-result, .artist-result-selected { 
     width: 20%;
     display: flex;
     flex-direction: column;
@@ -79,6 +103,22 @@ transform: rotate(5deg);
     justify-content: flex-start;
     height: 100px;
     padding: 10px;
+}
+
+.artist-result-selected {
+    background-color: #78fecf;
+    border-radius: 70% 50% 60% 30%;
+    transform: rotate(-2deg);
+    color: #884d30;
+    font-weight: bolder;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#results-row>div:nth-child(odd).artist-result-selected {
+    background-color: #98ADEC;
+    transform: rotate(6deg);
+    border-radius: 30% 50%;
 }
 
 .add-btn {
@@ -94,6 +134,29 @@ transform: rotate(5deg);
 .add-btn:hover {
     background-color: #102156;
     color: #FAF33E;
+    cursor: pointer;
+}
+
+.btn-hide {
+    display: none !important;
+    font-size: 100px;
+}
+
+.artist-result-unpick-hide {
+    display: none;
+}
+
+.artist-result-unpick-active {
+    /* background-color: #942624; */
+    color: #4168DC;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.artist-result-unpick-active:hover {
+    background-color: #CF3C3a;
+    font-weight: bolder;
+    color: #19358A;
     cursor: pointer;
 }
 

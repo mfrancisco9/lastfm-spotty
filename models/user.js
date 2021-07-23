@@ -35,6 +35,17 @@ User.init(
                 type: DataTypes.STRING,
                 trim: true,
                 allowNull: true,
+            },
+            artist_picks: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                get: function() {
+                    const rawValue = this.getDataValue('artist_picks')
+                    return rawValue ? rawValue.split(';') : null;
+                },
+                set: function (val) {
+                    this.setDataValue('artist_picks', val.join(';'));
+                }
             }
         
     },

@@ -30,7 +30,7 @@ function Header(props) {
             <li className="nav-item">
                 <a className="nav-link" href="#">last.fm</a>
             </li>
-            {props.userData.lastfm_username? <li className="nav-item">
+            {props.userData.lastfm_username ? <li className="nav-item">
                 <a className="nav-link" href="#">{props.userData.lastfm_username}</a>
             </li> : null}
             <li className="nav-item">

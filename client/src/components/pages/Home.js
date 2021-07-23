@@ -46,6 +46,8 @@ function Home(props) {
   };
 
   const logIn = () => {
+    console.log("logging in...")
+    console.log(loginData)
     return axios({
       method: "POST",
       url: "/api/login",
@@ -132,9 +134,9 @@ function Home(props) {
         </div>
       </div>
 {/* login stuff starts here */}
-      <div id="main-home-row">
+      <div id="main-home-row" className="row">
     
-        <div id="login-signup">
+        <div id="login-signup" className="col col-md-6">
           <div className="btns-row">
             {!userIdCookieValue ? 
             <button className="login-signup-btn btn btn-primary"
@@ -183,12 +185,12 @@ function Home(props) {
 
         </div>
 
-      <div id="spotify-lastfm">
+      <div id="spotify-lastfm" className="col col-md-6">
         { userIdCookieValue ?
         <div className="btns-row" >
           {true ? <button className="external-btn btn btn-primary">login to spotify</button> : null }
           { props.userData.lastfm_sessionkey ? <span>logged into last.fm as {props.userData.lastfm_username}</span> : <button onClick={()=> (window.location.href=`http://www.last.fm/api/auth/?api_key=${LASTFM_KEY}&cb=http://localhost:3000/`)}className="external-btn btn btn-primary">login to lastfm</button> }
-        </div> : null }
+        </div> : <div className="btns-row">log in or sign up to connect spotify and last.fm</div> }
       </div>
 
       </div>

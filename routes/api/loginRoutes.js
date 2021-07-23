@@ -10,6 +10,7 @@ router.post('/', async (req, res) => {
         console.log("Selected user info: ", userData)
 
         if (!userData) {
+            console.log("error")
             res
             .status(400)
             .json({ message: "Incorrect username or password, please try again"});
@@ -28,6 +29,7 @@ router.post('/', async (req, res) => {
             req.session.logged_in = true;
             req.session.name = userData.username;
             console.log("Username:", req.session.name)
+            console.log("logged in")
             res.json({ user: userData, message: 'You are now logged in '});
         })
 

@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     })
     }
     catch (err) {
-        console.log('signup backend error: ', error)
+        console.log('signup backend error: ', err)
         res.status(400).json(err)
     }
 })

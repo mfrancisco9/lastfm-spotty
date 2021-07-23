@@ -26,7 +26,7 @@ let userIdCookieValue = userIdCookieArray[1];
 const [userData, setUserData] = useState({
   username: "",
 })
-const [topArtists, setTopArtists] = useState(() => []);
+const [topArtists, setTopArtists] = useState([]);
 
 const getUser = () => {
   console.log("getting user")
@@ -77,7 +77,7 @@ useEffect(() => {
     <Router>
   <Route 
   exact path = '/' 
-  render ={(props) => ( <Home getUser={getUser} topArtists={topArtists} setTopArtists={setTopArtists} userData={userData} setUserData={setUserData}/> )} />
+  render ={(props) => ( <Home getUser={getUser}topArtists={topArtists} setTopArtists={setTopArtists} userData={userData} setUserData={setUserData}/> )} />
   <Route 
   exact path = '/Lastfm' 
   render ={(props) => ( <Lastfm topArtists={topArtists} setTopArtists={setTopArtists} />)} />
