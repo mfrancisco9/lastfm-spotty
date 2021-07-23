@@ -1,3 +1,4 @@
+
 #lastfm-body {
     display: flex;
     flex-direction: column;
@@ -105,7 +106,7 @@ transform: rotate(5deg);
     padding: 10px;
 }
 
-.artist-result-selected {
+#results-row>div:nth-child(even).artist-result-selected {
     background-color: #78fecf;
     border-radius: 70% 50% 60% 30%;
     transform: rotate(-2deg);

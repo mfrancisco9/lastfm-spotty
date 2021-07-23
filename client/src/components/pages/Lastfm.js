@@ -77,7 +77,15 @@ function Lastfm(props) {
   };
 
   const handleDelete = (e) => {
-
+    props.setTopArtists([])
+    var selected = document.querySelectorAll('div.artist-result-selected')
+    var unpick = document.querySelectorAll('div.artist-result-unpick-active')
+    var btns = document.querySelectorAll('div.btn-hide')
+    for (let i = 0; i < selected.length; i++){
+      btns[i].className="add-btn";
+      unpick[i].className="artist-result-unpick-hide"
+      selected[i].className="artist-result"
+    }
   }
 
   useEffect(() => {
@@ -92,7 +100,7 @@ function Lastfm(props) {
             <div id="artists-selected-row" className="row">
               <span id="selected-info-text" className="selected-artists-string col col-md-3">Selected artists: </span> 
               {props.topArtists.map((artist) => ( <span className="selected-artists-string col col-md-3">{artist}</span>))}
-              {props.topArtists ? <span id="selected-clear-text" className="selected-artists-string col col-md-3">clear</span> : null}
+              {props.topArtists ? <span id="selected-clear-text" className="selected-artists-string col col-md-3" onClick={handleDelete}>clear</span> : null}
             </div>
           ) : null}
         </div>
