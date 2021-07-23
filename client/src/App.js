@@ -11,19 +11,19 @@ import Header from './Header'
 
 const md5 = require('md5')
 
-
 function App() {
 
 // cookies
 var cookies = new Cookies();
-let userIdCookieString = document.cookie;
-let userIdCookieArray = userIdCookieString.split("=");
-let userIdCookieValue = userIdCookieArray[1];
+var userIdCookieString = document.cookie;
+var userIdCookieArray = userIdCookieString.split("=");
+var userIdCookieValue = userIdCookieArray[1];
 
 const [userData, setUserData] = useState({
   username: "",
 })
 const [topArtists, setTopArtists] = useState([]);
+
 
 const getUser = () => {
   console.log("getting user")
@@ -38,6 +38,14 @@ const getUser = () => {
   });
 }
 };
+
+
+const getSpotifySession = () => {
+  var client_id = process.env.REACT_APP_SPOTIFY_ID;
+  var client_secret = process.env.REACT_APP_SPOTIFY_SECRET;
+  var redirect_uri = 'http://localhost:3000'
+  var scopes = 'user-top-read use-read-recently-played playlist-modify-public playlist-read-private ugc-image-upload'
+}
 
 const getLastFMSession = () => {
   const token = new URLSearchParams(window.location.search).get("token");
