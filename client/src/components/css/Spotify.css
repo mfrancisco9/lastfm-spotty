@@ -1,0 +1,10 @@
+#spotify-main {
+width: 100%;
+}
+
+#spotify-profile {
+    margin-top: 25px;
+    background-color: #008F5D;
+    border-radius: 15px;
+    padding: 20px; 
+}
