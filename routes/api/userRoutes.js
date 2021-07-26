@@ -21,7 +21,9 @@ router.get("/:id", async (req, res) => {
 router.put('/:id', (req, res) => {
   User.update({
     lastfm_username: req.body.lastfm_username,
-    lastfm_sessionkey: req.body.lastfm_sessionkey
+    lastfm_sessionkey: req.body.lastfm_sessionkey,
+    spotify_username: req.body.spotify_username,
+    spotify_access_token: req.body.spotify_access_token
   },
   {where: {id: req.params.id}}
   ).then(updatedUser => res.json(updatedUser)).catch(error => res.json(error))

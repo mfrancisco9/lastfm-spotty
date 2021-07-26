@@ -6,19 +6,12 @@ require("dotenv").config();
 
 function Home(props) {
   const LASTFM_KEY = "685befed1e858efa8d34ec169041ec63";
-  const SPOTIFY_ID = "be0a13c1020044b6a93d95d7b34662ec";
-  const SPOTIFY_SECRET = process.env.REACT_APP_SPOTIFY_SECRET;
-  const SPOTIFY_SCOPES = 'user-top-read playlist-modify-private playlist-read-private'
-  const SPOTIFY_REDIRECT_URI = 'http://localhost:3000'
+  const SCOPES = ['playlist-read-private', 'user-read-email', 'user-read-email', 'user-top-read'];
+  const SPOTIFY_CLIENT_ID = "be0a13c1020044b6a93d95d7b34662ec";
+  const SPOTIFY_REDIRECT = "http://localhost:3000/"
+  const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize"
+  const SCOPES_URL_PARAM = SCOPES.join("%20");
 
-  const spotifyURL = 'https://accounts.spotify.com/authorize' +
-  '?response_type=code' +
-  '&client_id=' + SPOTIFY_ID +
-  (SPOTIFY_SCOPES ? '&scope=' + encodeURIComponent(SPOTIFY_SCOPES) : '') +
-  '&redirect_uri=' + encodeURIComponent(SPOTIFY_REDIRECT_URI);
-
-
-  console.log(SPOTIFY_ID, SPOTIFY_SCOPES)
 
   // states
   const [toggles, setToggle] = useState({
@@ -40,7 +33,6 @@ function Home(props) {
   let userIdCookieString = document.cookie;
   let userIdCookieArray = userIdCookieString.split("=");
   let userIdCookieValue = userIdCookieArray[1];
-
 
   // signup and login
   const signUp = () => {
@@ -78,7 +70,7 @@ function Home(props) {
   };
 
   const spotifyLogin = () => {
-console.log("placeholder")
+    window.location=`${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${SPOTIFY_REDIRECT}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   }
 
   const logOut = () => {
@@ -91,7 +83,6 @@ console.log("placeholder")
       return window.location.assign("/");
     });
   };
-
 
   return (
     // main logo and description
@@ -154,14 +145,12 @@ console.log("placeholder")
               setToggle({decentLogin: false, decentSignup: false})}}/>
           </form> : null }
 
-
-
         </div>
 
       <div id="spotify-lastfm" className="col col-md-6">
         { userIdCookieValue ?
         <div className="btns-row" >
-          {props.userData.spotify_sessionkey ? <span>logged into spotify as {props.userData.spotify_username}</span> : <button onClick={()=> spotifyLogin()} className="external-btn btn btn-primary">login to spotify</button>}
+          {props.userData.spotify_access_token ? <span>logged into spotify as {props.userData.spotify_username}</span> : <button onClick={()=> spotifyLogin()} className="external-btn btn btn-primary">login to spotify</button>}
           { props.userData.lastfm_sessionkey ? <span>logged into last.fm as {props.userData.lastfm_username}</span> : <button onClick={()=> (window.location.href=`http://www.last.fm/api/auth/?api_key=${LASTFM_KEY}&cb=http://localhost:3000/`)}className="external-btn btn btn-primary">login to lastfm</button> }
         </div> : <div className="btns-row">log in or sign up to connect spotify and last.fm</div> }
       </div>

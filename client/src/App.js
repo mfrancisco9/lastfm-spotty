@@ -18,6 +18,13 @@ var cookies = new Cookies();
 var userIdCookieString = document.cookie;
 var userIdCookieArray = userIdCookieString.split("=");
 var userIdCookieValue = userIdCookieArray[1];
+console.log(document.cookie)
+// spotify info
+// const SCOPES = ['playlist-read-private', 'user-read-email', 'user-read-email', 'user-top-read'];
+// const SPOTIFY_CLIENT_ID = "be0a13c1020044b6a93d95d7b34662ec";
+// const SPOTIFY_REDIRECT = "http://localhost:3000/"
+// const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize"
+
 
 const [userData, setUserData] = useState({
   username: "",
@@ -61,11 +68,56 @@ const getLastFMSession = () => {
   })
 }
 
+const setSpotifyData = (access_token) => {
+  axios({
+    method: "GET",
+    url: "https://api.spotify.com/v1/me",
+    headers: { Authorization: `Bearer ${access_token}`}
+  }).then(({data}) => {
+    console.log(data)
+    axios({
+      method: "PUT",
+      url: `api/users/${userIdCookieValue}`,
+      data: {spotify_username: data.display_name}
+    })
+  })
+  
+  axios({
+    method: "PUT",
+    url: `api/users/${userIdCookieValue}`,
+    data: {
+      spotify_access_token: access_token
+    }
+  })
+}
+
+const getReturnedParamsFromSpotifyAuth = (hash) => {
+  const stringAfterHash = hash.substring(1);
+  const paramsInUrl = stringAfterHash.split("&");
+  const paramsSplitUp = paramsInUrl.reduce((accumulator, currentValue) => {
+    console.log(currentValue);
+    const [key, value] = currentValue.split("=");
+    accumulator[key] = value;
+    return accumulator
+}, {});
+return paramsSplitUp;
+};
+
 useEffect(() => {
   getUser();
   if (new URLSearchParams(window.location.search).get("token")){
     getLastFMSession();
     console.log(userData)
+  }
+  if (window.location.hash) {
+    const { access_token, expires_in, token_type} =
+    getReturnedParamsFromSpotifyAuth(window.location.hash);
+    setSpotifyData(access_token);
+
+    // localStorage.clear();
+    // localStorage.setItem("accessToken", access_token);
+    // localStorage.setItem("tokenType", token_type);
+    // localStorage.setItem("expiresIn", expires_in);
   }
 }, []);
 
