@@ -78,12 +78,7 @@ function Home(props) {
   };
 
   const spotifyLogin = () => {
-    axios({
-      method: "POST",
-      url: "/api/spotify/login"
-    }).then((success) => {
-      alert("YES")
-    })
+console.log("placeholder")
   }
 
   const logOut = () => {
