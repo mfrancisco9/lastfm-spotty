@@ -44,7 +44,12 @@ User.init(
     spotify_access_token: {
       type: DataTypes.STRING,
       trim: true,
-      allownull: false,
+      allownull: true,
+    },
+    spotify_refresh_token: {
+        type: DataTypes.STRING,
+        trim: true,
+        allowNull: true
     },
     artist_picks: {
       type: DataTypes.STRING,

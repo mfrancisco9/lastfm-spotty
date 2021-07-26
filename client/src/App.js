@@ -20,10 +20,15 @@ var userIdCookieArray = userIdCookieString.split("=");
 var userIdCookieValue = userIdCookieArray[1];
 console.log(document.cookie)
 // spotify info
-// const SCOPES = ['playlist-read-private', 'user-read-email', 'user-read-email', 'user-top-read'];
-// const SPOTIFY_CLIENT_ID = "be0a13c1020044b6a93d95d7b34662ec";
-// const SPOTIFY_REDIRECT = "http://localhost:3000/"
-// const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize"
+const scopes = ['playlist-read-private', 'user-read-email', 'user-read-email', 'user-top-read'];
+const authEndpoint = "https://accounts.spotify.com/authorize";
+const redirectUri = "http://localhost:3000/";
+const clientId = "be0a13c1020044b6a93d95d7b34662ec";
+const loginUrl = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scopes.join(
+  "%20"
+)}`;
+const code = new URLSearchParams(window.location.search).get('code')
+
 
 
 const [userData, setUserData] = useState({
@@ -46,7 +51,6 @@ const getUser = () => {
 }
 };
 
-
 const getLastFMSession = () => {
   const token = new URLSearchParams(window.location.search).get("token");
   var string = "api_key" + process.env.REACT_APP_LASTFM_KEY + "methodauth.getSessiontoken" + token + process.env.REACT_APP_LASTFM_SECRET
@@ -68,58 +72,26 @@ const getLastFMSession = () => {
   })
 }
 
-const setSpotifyData = (access_token) => {
-  axios({
-    method: "GET",
-    url: "https://api.spotify.com/v1/me",
-    headers: { Authorization: `Bearer ${access_token}`}
-  }).then(({data}) => {
-    console.log(data)
-    axios({
-      method: "PUT",
-      url: `api/users/${userIdCookieValue}`,
-      data: {spotify_username: data.display_name}
-    })
-  })
-  
-  axios({
-    method: "PUT",
-    url: `api/users/${userIdCookieValue}`,
-    data: {
-      spotify_access_token: access_token
-    }
-  })
-}
-
-const getReturnedParamsFromSpotifyAuth = (hash) => {
-  const stringAfterHash = hash.substring(1);
-  const paramsInUrl = stringAfterHash.split("&");
-  const paramsSplitUp = paramsInUrl.reduce((accumulator, currentValue) => {
-    console.log(currentValue);
-    const [key, value] = currentValue.split("=");
-    accumulator[key] = value;
-    return accumulator
-}, {});
-return paramsSplitUp;
-};
-
 useEffect(() => {
   getUser();
   if (new URLSearchParams(window.location.search).get("token")){
     getLastFMSession();
     console.log(userData)
   }
-  if (window.location.hash) {
-    const { access_token, expires_in, token_type} =
-    getReturnedParamsFromSpotifyAuth(window.location.hash);
-    setSpotifyData(access_token);
 
-    // localStorage.clear();
-    // localStorage.setItem("accessToken", access_token);
-    // localStorage.setItem("tokenType", token_type);
-    // localStorage.setItem("expiresIn", expires_in);
-  }
-}, []);
+  if (new URLSearchParams(window.location.search).get('code')) {
+    console.log(code)
+    axios.post('/api/spotify/login/', { code }).then((response) => {
+      console.log(response.data.accessToken)
+      axios({
+        method: "PUT",
+        url: `api/users/${userIdCookieValue}`,
+        data: { 
+          spotify_access_token: response.data.accessToken
+        }
+      })
+    }) 
+}}, []);
 
   return (
     <div>
@@ -127,7 +99,7 @@ useEffect(() => {
     <Router>
   <Route 
   exact path = '/' 
-  render ={(props) => ( <Home getUser={getUser}topArtists={topArtists} setTopArtists={setTopArtists} userData={userData} setUserData={setUserData}/> )} />
+  render ={(props) => ( <Home getUser={getUser}topArtists={topArtists} setTopArtists={setTopArtists} userData={userData} setUserData={setUserData} spotifyUrl={loginUrl}/> )} />
   <Route 
   exact path = '/Lastfm' 
   render ={(props) => ( <Lastfm topArtists={topArtists} setTopArtists={setTopArtists} />)} />
