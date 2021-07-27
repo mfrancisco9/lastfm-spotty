@@ -31,27 +31,29 @@
 
 /* selected artists display at top of options box */
 
-#selected-info-text {
-    text-decoration: #2a68a2 wavy underline;
+.selected-artists-string {
+    margin-right: 15px;
 }
 
 #selected-clear-text {
-    text-decoration: #cf3c3a wavy underline;
-    text-align: center;
+    color: #D0C8B3 
 }
 
 #selected-clear-text:hover {
-    text-decoration: #193e61 wavy underline;
+    background-color: #d34d4a;
+    border-radius: 50%;
     cursor: pointer;
-    border-radius: 100%;
-    box-sizing: border-box;
-    color: #FAF33E;
 }
 
-#artists-selected-row {
-
+#selected-save-text {
+    color: #78fecf
 }
-
+#selected-save-text:hover {
+    color: #19358a;
+    background-color: #78fecf;
+    border-radius: 50%;
+    cursor: pointer;
+}
 
 .options-column {
     display: flex;
@@ -141,24 +143,6 @@ transform: rotate(5deg);
 .btn-hide {
     display: none !important;
     font-size: 100px;
-}
-
-.artist-result-unpick-hide {
-    display: none;
-}
-
-.artist-result-unpick-active {
-    /* background-color: #942624; */
-    color: #4168DC;
-    border-radius: 50%;
-    padding: 3px;
-}
-
-.artist-result-unpick-active:hover {
-    background-color: #CF3C3a;
-    font-weight: bolder;
-    color: #19358A;
-    cursor: pointer;
 }
 
 #results-row>div:hover .add-btn {

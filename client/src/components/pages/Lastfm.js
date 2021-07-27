@@ -14,7 +14,6 @@ function Lastfm(props) {
   const [lastFmDataPreferences, setLastFmDataPreferences] = useState({
     period: "overall",
     limit: 5,
-    method: "gettopartists",
   });
 
   // cookies
@@ -38,23 +37,12 @@ function Lastfm(props) {
     console.log("making call");
     axios({
       method: "GET",
-      url: `https://ws.audioscrobbler.com/2.0/?method=user.${lastFmDataPreferences.method}&user=${userData.lastfm_username}&period=${lastFmDataPreferences.period}&limit=${lastFmDataPreferences.limit}&api_key=${process.env.REACT_APP_LASTFM_KEY}&format=json`,
+      url: `https://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=${userData.lastfm_username}&period=${lastFmDataPreferences.period}&limit=${lastFmDataPreferences.limit}&api_key=${process.env.REACT_APP_LASTFM_KEY}&format=json`,
     }).then(({ data }) => {
-      if (lastFmDataPreferences.method === "gettopartists") {
         console.log(data.topartists.artist);
         setResultsToggle({ display: true, content: "artists" });
         setUserTops(data.topartists.artist);
-      }
-      if (lastFmDataPreferences.method === "gettopalbums") {
-        console.log(data.topalbums.album);
-        setResultsToggle({ display: true, content: "albums" });
-        setUserTops(data.topalbums.album);
-      }
-      if (lastFmDataPreferences.method === "gettoptracks") {
-        console.log(data.toptracks.track);
-        setResultsToggle({ display: true, content: "tracks" });
-        setUserTops(data.toptracks.track);
-      }
+      
     });
   };
 
@@ -77,11 +65,9 @@ function Lastfm(props) {
   const handleDelete = (e) => {
     props.setTopArtists([])
     var selected = document.querySelectorAll('div.artist-result-selected')
-    var unpick = document.querySelector('div.artist-result-unpick-active')
     var btns = document.querySelectorAll('div.btn-hide')
     for (let i = 0; i < selected.length; i++){
       btns[i].className="add-btn";
-      unpick[i].className="artist-result-unpick-hide"
       selected[i].className="artist-result"
     }
   }
@@ -95,32 +81,18 @@ function Lastfm(props) {
       <div id="options-div" className="bg-dark">
         <div id="picks-row row">
           {props.topArtists.length ? (
-            <div id="artists-selected-row" className="row">
-              <span id="selected-info-text" className="selected-artists-string col col-md-3">Selected artists: </span> 
-              {props.topArtists.map((artist) => ( <span className="selected-artists-string col col-md-3">{artist}</span>))}
-              {props.topArtists ? <span id="selected-clear-text" className="selected-artists-string col col-md-3" onClick={handleDelete}>clear</span> : null}
+            <div id="artists-selected-row">
+              <span id="selected-info-text" className="selected-artists-string">Selected artists: </span> 
+              {props.topArtists.map((artist) => ( <span className="selected-artists-string">{artist}</span>))}
+              <span id="selected-save-text" className="selected-artists-string" onClick={() => console.log("save for db")}>save</span>
+              <span id="selected-clear-text" className="selected-artists-string" onClick={handleDelete}>clear</span> 
             </div>
           ) : null}
         </div>
 
         <div id="options-box" className="bg-success row">
-          <div id="method-dropdown" className="options-column col col-md-2">
-            <span>Data</span>
-            <select
-              onChange={(event) =>
-                setLastFmDataPreferences({
-                  ...lastFmDataPreferences,
-                  method: event.target.value,
-                })
-              }
-            >
-              <option value="gettopartists">artists</option>
-              <option value="gettopalbums">albums</option>
-              <option value="gettoptracks">tracks</option>
-            </select>
-          </div>
-
-          <div id="period-dropdown" className="options-column col col-md-2">
+         
+          <div id="period-dropdown" className="options-column col col-md-4">
             <span>Period</span>
             <select
               onChange={(event) =>
@@ -139,7 +111,7 @@ function Lastfm(props) {
             </select>
           </div>
 
-          <div id="limit-dropdown" className="options-column col col-md-2">
+          <div id="limit-dropdown" className="options-column col col-md-4">
             <span>Results</span>
             <select
               onChange={(event) =>
@@ -157,19 +129,12 @@ function Lastfm(props) {
           </div>
 
           <button
-            className="btn btn-light col-md-3"
+            className="btn btn-light col-md-4"
             onClick={() => {
               makeCall();
             }}
           >
             submit
-          </button>
-
-          <button
-            className="btn btn-info col-md-3"
-            onClick={() => console.log("save button for db")}
-          >
-            save
           </button>
         </div>
 
@@ -187,7 +152,6 @@ function Lastfm(props) {
                       id={`${top.name.replaceAll(" ", "%")}-add`}
                       onClick={(e) => {
                         e.target.parentNode.className = "artist-result-selected"
-                        e.target.nextSibling.className = "artist-result-unpick-active"
                         console.log("e.target.id is: ", e.target.id)
                         e.target.className = "btn-hide";
                         saveArtist(e.target.id);
@@ -195,7 +159,6 @@ function Lastfm(props) {
                     >
                       add
                     </div>
-                    <div className="artist-result-unpick-hide">remove</div>
                   </div>
                 ))
               : null}
