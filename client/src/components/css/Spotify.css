@@ -1,10 +1,175 @@
 #spotify-main {
-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
 }
 
-#spotify-profile {
-    margin-top: 25px;
-    background-color: #008F5D;
-    border-radius: 15px;
-    padding: 20px; 
+#spotify-top-row {
+  width: 70vw;
+  height: 10vh;
+  margin: 15px 0px;
+}
+
+#spotify-profile-box {
+  background-color: #008f5d;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px 0px 0px 10px;
+}
+
+#profile-row {
+  height: 100%;
+}
+
+#spotify-profile-name {
+  font-size: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#spotify-profile-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#spotify-profile-image img {
+  height: 75%;
+  width: 75%;
+  border-radius: 5px;
+}
+
+#spotify-criteria-box {
+  background-color: #093421;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px 10px 10px 0px;
+}
+
+#spotify-criteria-form {
+  background-color: #19358a;
+  width: 100%;
+  border-radius: 0px 5px 5px 0px;
+}
+
+#spotify-results-container {
+  border-radius: 3px;
+  width: 70vw;
+  background-color: #006642;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#spotify-results-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+
+.spotify-artist-result, .spotify-artist-result-selected  {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    padding: 10px;
+}
+
+#spotify-results-row>div:nth-child(even).spotify-artist-result-selected {
+    background-color: #78fecf;
+    border-radius: 70% 50% 60% 30%;
+    transform: rotate(-2deg);
+    color: #884d30;
+    font-weight: bolder;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#spotify-results-row>div:nth-child(odd).spotify-artist-result-selected {
+    background-color: #98ADEC;
+    transform: rotate(6deg);
+    border-radius: 30% 50%;
+}
+
+.spotify-artist-name {
+    text-align: center;
+}
+
+#spotify-results-row>div:nth-child(odd).spotify-artist-result:hover {
+    color: #FAF33E;
+    background-color: #942624;
+    border-radius: 50%;
+    transform: rotate(-5deg);
+}
+
+
+#spotify-results-row>div:nth-child(even).spotify-artist-result:hover {
+    color: #FAF33E;
+    background-color: #188C59;
+    border-radius: 50%;
+    transform: rotate(5deg);
+    
+    }
+
+
+
+
+
+/* add button */
+
+#spotify-results-row>div:hover .add-btn {
+    display: block;
+}
+
+.add-btn:hover {
+    background-color: #102156;
+    color: #FAF33E;
+    cursor: pointer;
+}
+
+.btn-hide {
+    display: none !important;
+    font-size: 100px;
+}
+
+
+/* saved artists */
+
+#spotify-picked-artists {
+    width: 70vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.spotify-picked-item {
+    margin-right: 20px;
+}
+
+#spotify-picked-selected {
+
+}
+
+#spotify-picked-clear {
+    color: #D0C8B3 
+
+}
+#spotify-picked-clear:hover {
+    background-color: #d34d4a;
+    border-radius: 50%;
+    cursor: pointer;
 }

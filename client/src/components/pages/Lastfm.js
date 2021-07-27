@@ -10,10 +10,7 @@ function Lastfm(props) {
     display: false,
     content: "artists",
   });
-
   const [userTops, setUserTops] = useState([]);
-  // const [similarTopArtists, setSimilarTopArtists] = useState([]);
-
   const [lastFmDataPreferences, setLastFmDataPreferences] = useState({
     period: "overall",
     limit: 5,
@@ -65,21 +62,22 @@ function Lastfm(props) {
     console.log("saving ", artist)
     var fixedString = artist.replaceAll("%", " ").split("").splice(0, artist.length-4).join("")
     console.log(`fixed string is ${fixedString}`)
-    if (props.topArtists.includes(artist) === false)
-      props.setTopArtists([...props.topArtists, fixedString]);
-    axios({
-      method: "PUT",
-      url: `api/users/save/${userIdCookieValue}`,
-      data: {
-        artist_picks: props.topArtists
-      }
-    })
+    if (props.topArtists.includes(artist) === false) {
+      props.setTopArtists([...props.topArtists, fixedString]); 
+    }
+    // axios({
+    //   method: "PUT",
+    //   url: `api/users/save/${userIdCookieValue}`,
+    //   data: {
+    //     artist_picks: props.topArtists
+    //   }
+    // })
   };
 
   const handleDelete = (e) => {
     props.setTopArtists([])
     var selected = document.querySelectorAll('div.artist-result-selected')
-    var unpick = document.querySelectorAll('div.artist-result-unpick-active')
+    var unpick = document.querySelector('div.artist-result-unpick-active')
     var btns = document.querySelectorAll('div.btn-hide')
     for (let i = 0; i < selected.length; i++){
       btns[i].className="add-btn";

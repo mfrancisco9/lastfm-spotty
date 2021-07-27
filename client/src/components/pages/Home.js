@@ -196,7 +196,7 @@ function Home(props) {
           <div id="spotify-lastfm" className="col col-md-6">
             {userIdCookieValue ? (
               <div className="btns-row">
-                {props.userData.spotify_username ? (
+                {false ? (
                   <span>
                     logged into spotify as {props.userData.spotify_username}
                   </span>
