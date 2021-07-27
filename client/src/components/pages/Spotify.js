@@ -64,7 +64,17 @@ const saveArtist = (artist) => {
     }
 }
 
-  const handleDelete = (e) => {
+
+
+const handleSave = () => {
+    console.log("saving to sql: ", props.topArtists)
+    axios({
+        method: "PUT",
+        url: `api/users/save/${userIdCookieValue}`,
+        data: { artist_picks: props.topArtists}
+    })
+}
+  const handleDelete = () => {
     props.setTopArtists([])
     var selected = document.querySelectorAll('div.spotify-artist-result-selected')
     var btns = document.querySelectorAll('div.btn-hide')
@@ -83,22 +93,11 @@ const saveArtist = (artist) => {
   return (
     <div id="spotify-main" className="container-fluid">
       
-      
-      
       <div id="spotify-top-row" className="row">
-        <div id="spotify-profile-box" className="col col-md-6">
-            <div className="row" id="profile-row">
-          <div id="spotify-profile-name" className="col col-md-8">
-            {props.userData.spotify_username}
-          </div>
-          <div id="spotify-profile-image" className="col col-md-4">
-            {spotifyUserInfo.img_url ? (
-              <img src={spotifyUserInfo.img_url} />
-            ) : null}
-          </div>
-          </div>
+        <div id="spotify-info-box" className="col col-md-4">
+        info and instructions will go here
         </div>   
-        <div id="spotify-criteria-box" className="col col-md-6 container">
+        <div id="spotify-criteria-box" className="col col-md-8 container">
             <form id="spotify-criteria-form" className="row">
             <select
               id="spotify-range-input"
@@ -150,7 +149,7 @@ const saveArtist = (artist) => {
         {props.topArtists.map((artist) => (
             <div className="spotify-picked-item">{artist}</div>
         ))}
-
+        <span className="spotify-picked-item" id="spotify-picked-save" onClick={() => handleSave()}>save</span>
         <span className="spotify-picked-item" id="spotify-picked-clear" onClick={() => handleDelete()}>clear</span> 
     </div> : null }
 
