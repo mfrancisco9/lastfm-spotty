@@ -16,7 +16,7 @@ function Header(props) {
                 <Link className="nav-link" to="/spotify">spotify</Link>
             </li>
             <li className="nav-item">
-                <a className="nav-link" href="#">dashboard</a>
+                <a className="nav-link" href="/playlist">make a playlist</a>
             </li>
             <li className="nav-item">
                 <a className="nav-link" href="#">about</a>

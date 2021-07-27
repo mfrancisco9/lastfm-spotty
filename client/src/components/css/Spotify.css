@@ -116,7 +116,6 @@
     transform: rotate(-5deg);
 }
 
-
 #spotify-results-row>div:nth-child(even).spotify-artist-result:hover {
     color: #FAF33E;
     background-color: #188C59;
@@ -124,10 +123,6 @@
     transform: rotate(5deg);
     
     }
-
-
-
-
 
 /* add button */
 
@@ -159,10 +154,6 @@
 
 .spotify-picked-item {
     margin-right: 20px;
-}
-
-#spotify-picked-selected {
-
 }
 
 #spotify-picked-clear {

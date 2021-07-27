@@ -1,0 +1,21 @@
+#playlist-main-container {
+min-height: 90vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
+
+
+#playlist-specs-container {
+    width: 70vw;
+    background-color: blue;
+    border-radius: 5px;
+}
+
+#playlist-artists-container {
+    width: 70vw;
+    background-color: hotpink;
+    border-radius: 5px;
+
+}

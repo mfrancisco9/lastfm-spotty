@@ -7,6 +7,7 @@ import axios from "axios";
 import Home from "./components/pages/Home";
 import Lastfm from "./components/pages/Lastfm";
 import Spotify from "./components/pages/Spotify";
+import Playlist from "./components/pages/Playlist";
 import Header from "./Header";
 
 const md5 = require("md5");
@@ -127,18 +128,26 @@ function App() {
           )}
         />
         <Route
-          exact
-          path="/Lastfm"
+          exact path="/Lastfm"
           render={(props) => (
             <Lastfm topArtists={topArtists} setTopArtists={setTopArtists} />
           )}
         />
+        
         <Route exact path="/Spotify" render={(props) => 
-        <Spotify
-        topArtists={topArtists}
-        userData={userData}
-        setTopArtists={setTopArtists}    
-        />} />
+          <Spotify
+          topArtists={topArtists}
+          userData={userData}
+          setTopArtists={setTopArtists}    
+          />} />
+        
+        <Route
+        exact path="/playlist" 
+        render={(props) => (
+          <Playlist
+          topArtists={topArtists}
+          userData={userData}/>
+        )} />
       </Router>
     </div>
   );
