@@ -7,15 +7,57 @@ justify-content: center;
 }
 
 
-#playlist-specs-container {
+#playlist-specs-container, #playlist-artists-container {
     width: 70vw;
-    background-color: blue;
+    margin: 5px auto;
     border-radius: 5px;
+    padding: 20px;
+    color: #EDFDED;
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+
+}
+
+#playlist-specs-container {
+    background-color: #2141ab;
+    justify-content: center;
 }
 
 #playlist-artists-container {
-    width: 70vw;
-    background-color: hotpink;
-    border-radius: 5px;
+    background-color: #193E61;
+    justify-content: flex-start;
+}
 
+.playlist-artists-span {
+    margin-right: 10px;
+}
+
+#making-playlists {
+    background-color: #1b9d64;
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+
+
+
+.specs-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#checkboxes {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+.checkbox-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.checkbox-item input {
+    margin-right: 3px;
 }
